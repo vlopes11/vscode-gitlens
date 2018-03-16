@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Fixes [#312](https://github.com/eamodio/vscode-gitlens/issues/312) - Simplify switching between relative and absolute date formatting
+
 ## [8.1.1] - 2018-03-12
 ### Fixed
 - Fixes [#276](https://github.com/eamodio/vscode-gitlens/issues/276) - Lookup for branches without upstreams fails
