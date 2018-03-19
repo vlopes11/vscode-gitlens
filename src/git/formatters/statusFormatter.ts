@@ -13,6 +13,7 @@ export interface IStatusFormatOptions extends IFormatOptions {
         file?: Strings.ITokenOptions;
         filePath?: Strings.ITokenOptions;
         path?: Strings.ITokenOptions;
+        status?: Strings.ITokenOptions;
     };
 }
 
@@ -36,6 +37,11 @@ export class StatusFileFormatter extends Formatter<IGitStatusFile, IStatusFormat
     get path() {
         const directory = GitStatusFile.getRelativePath(this._item, this._options.relativePath);
         return this._padOrTruncate(directory, this._options.tokenOptions!.file);
+    }
+
+    get status() {
+        const status = GitStatusFile.getStatusText(this._item.status);
+        return this._padOrTruncate(status, this._options.tokenOptions!.status);
     }
 
     get working() {

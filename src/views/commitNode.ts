@@ -62,6 +62,8 @@ export class CommitNode extends ExplorerRefNode {
             };
         }
 
+        item.tooltip = CommitFormatter.fromTemplate('${authorAgo} (${date})\n\n${message}', this.commit, { dataFormat: Container.config.defaultDateFormat } as ICommitFormatOptions);
+
         return item;
     }
 

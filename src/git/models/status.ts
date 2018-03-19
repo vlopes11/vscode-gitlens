@@ -68,6 +68,10 @@ export class GitStatusFile implements IGitStatusFile {
         return getGitStatusOcticon(this.status);
     }
 
+    getStatusText(status: IGitStatusFile): string {
+        return GitStatusFile.getStatusText(this.status);
+    }
+
     with(changes: { indexStatus?: GitStatusFileStatus | null, workTreeStatus?: GitStatusFileStatus | null, fileName?: string, originalFileName?: string | null }): GitStatusFile {
         return new GitStatusFile(
             this.repoPath,
@@ -96,6 +100,10 @@ export class GitStatusFile implements IGitStatusFile {
 
     static getRelativePath(status: IGitStatusFile, relativeTo?: string): string {
         return GitUri.getRelativePath(status.fileName, relativeTo);
+    }
+
+    static getStatusText(status: GitStatusFileStatus): string {
+        return getGitStatusText(status);
     }
 }
 
@@ -133,4 +141,22 @@ const statusIconsMap = {
 
 export function getGitStatusIcon(status: GitStatusFileStatus): string {
     return statusIconsMap[status] || statusIconsMap['X'];
+}
+
+const statusTextMap = {
+    '!': 'ignored',
+    '?': 'untracked',
+    A: 'added',
+    C: 'copied',
+    D: 'deleted',
+    M: 'modified',
+    R: 'renamed',
+    T: 'modified',
+    U: 'conflict',
+    X: 'unknown',
+    B: 'unknown'
+};
+
+export function getGitStatusText(status: GitStatusFileStatus): string {
+    return statusTextMap[status] || statusTextMap['X'];
 }

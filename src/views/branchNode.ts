@@ -49,10 +49,24 @@ export class BranchNode extends ExplorerRefNode {
 
     async getTreeItem(): Promise<TreeItem> {
         let name = this.label;
+        let tooltip = `${name}${this.branch!.current ? ' (current)' : ''}`;
         if (!this.branch.remote && this.branch.tracking !== undefined && this.explorer.config.showTrackingBranch) {
             name += ` ${GlyphChars.Space}${GlyphChars.ArrowLeftRight}${GlyphChars.Space} ${this.branch.tracking}`;
+            tooltip += `\n\nTracking ${GlyphChars.Dash} ${this.branch.tracking}`;
+            if (this.branch.state.ahead || this.branch.state.behind) {
+                if (this.branch.state.ahead) {
+                    tooltip += `\n${this.branch.state.ahead} ${this.branch.state.ahead === 1 ? 'commit' : 'commits'} ahead`;
+                }
+                if (this.branch.state.behind) {
+                    tooltip += `\n${this.branch.state.behind} ${this.branch.state.behind === 1 ? 'commit' : 'commits'} behind`;
+                }
+            }
+            else {
+                tooltip += `\nup-to-date`;
+            }
         }
         const item = new TreeItem(`${this.branch!.current ? `${GlyphChars.Check} ${GlyphChars.Space}` : ''}${name}`, TreeItemCollapsibleState.Collapsed);
+        item.tooltip = tooltip;
 
         if (this.branch.remote) {
             item.contextValue = ResourceType.RemoteBranch;

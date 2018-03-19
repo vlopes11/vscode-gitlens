@@ -66,6 +66,7 @@ export class RemoteNode extends ExplorerNode {
 
             const item = new TreeItem(label, TreeItemCollapsibleState.Collapsed);
             item.contextValue = ResourceType.Remote;
+            item.tooltip = `${this.remote.name}\n\n${this.remote.path} (${(this.remote.provider !== undefined) ? this.remote.provider.name : this.remote.domain})`;
 
             if (this.remote.provider !== undefined) {
                 item.iconPath = {

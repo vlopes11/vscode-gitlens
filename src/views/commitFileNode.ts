@@ -53,6 +53,7 @@ export class CommitFileNode extends ExplorerNode {
 
         const item = new TreeItem(this.label, TreeItemCollapsibleState.None);
         item.contextValue = this.resourceType;
+        item.tooltip = this.tooltip;
 
         if ((this.displayAs & CommitFileNodeDisplayAs.CommitIcon) === CommitFileNodeDisplayAs.CommitIcon) {
             item.iconPath = {
@@ -73,8 +74,9 @@ export class CommitFileNode extends ExplorerNode {
 
         item.command = this.getCommand();
 
-        // Only cache the label for a single refresh
+        // Only cache the label/tooltip for a single refresh
         this._label = undefined;
+        this._tooltip = undefined;
 
         return item;
     }
@@ -117,10 +119,27 @@ export class CommitFileNode extends ExplorerNode {
     set relativePath(value: string | undefined) {
         this._relativePath = value;
         this._label = undefined;
+        this._tooltip = undefined;
     }
 
     protected get resourceType(): ResourceType {
         return ResourceType.CommitFile;
+    }
+
+    private _tooltip: string | undefined;
+    get tooltip() {
+        if (this._tooltip === undefined) {
+            this._tooltip = (this.displayAs & CommitFileNodeDisplayAs.CommitLabel)
+                ? CommitFormatter.fromTemplate(
+                    '${authorAgo} (${date})\n\n${message}',
+                    this.commit,
+                    {
+                        dataFormat: Container.config.defaultDateFormat
+                    } as ICommitFormatOptions
+                )
+                : StatusFileFormatter.fromTemplate('${file}\n\n${path}\n${status}', this.status);
+        }
+        return this._tooltip;
     }
 
     protected getCommitTemplate() {
